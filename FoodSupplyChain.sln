@@ -33,6 +33,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FSC_Helpers", "FSC_Helpers"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSC_Helpers", "FSC_Helpers\FSC_Helpers.csproj", "{0D55EDAA-1A68-4808-80CF-CBA69923AF92}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB_BackUp", "DB_BackUp", "{6A2C3093-5C9F-4346-AE7D-05A5E265521C}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\FSCDB.bak = ..\..\..\FSCDB.bak
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
