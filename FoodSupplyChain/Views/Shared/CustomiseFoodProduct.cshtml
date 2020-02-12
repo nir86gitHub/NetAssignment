@@ -1,0 +1,237 @@
+﻿@model FSC_BOL.Models.FoodProduct.GbMProduct
+@{
+    Layout = null;
+}
+@{ 
+    List<FSC_BOL.Models.FoodProduct.GbMProductAttribute> productAttributes = new List<FSC_BOL.Models.FoodProduct.GbMProductAttribute>();
+    List<FSC_BOL.Models.FoodProduct.GbMProduct> otherFoodProducts = new List<FSC_BOL.Models.FoodProduct.GbMProduct>();
+    if (ViewBag.FoodProductAttributes != null)
+    {
+        productAttributes = (List<FSC_BOL.Models.FoodProduct.GbMProductAttribute>)ViewBag.FoodProductAttributes;
+    }
+    if (ViewBag.OtherFoodProducts != null)
+    {
+        otherFoodProducts = (List<FSC_BOL.Models.FoodProduct.GbMProduct>)ViewBag.OtherFoodProducts;
+    }
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <form id="frmCustomiseProduct">
+        <input type="hidden" id="product" value="@Model.ProductId" />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group" id="divddlFoodOption">
+                    <label for="ddlFoodOption">Select @Model.ProductName Option</label>
+                    <select class="form-control" id="ddlFoodOption" data-required="True" onchange="OptionChange()">
+                        <option value="0">--Select--</option>
+                        @foreach (FSC_BOL.Models.FoodProduct.GbMProductAttribute productOption in productAttributes)
+                        {
+                            <option value="@productOption.ProductDetailId">
+                                @(
+                                                      productOption.AttributeName1 +
+                                                      (productOption.AttributeName2 != string.Empty ? " / " + productOption.AttributeName2 : string.Empty) +
+                                                      (productOption.AttributeName3 != string.Empty ? " / " + productOption.AttributeName3 : string.Empty) +
+                                                      (productOption.AttributeName4 != string.Empty ? " / " + productOption.AttributeName4 : string.Empty) +
+                                                      (productOption.AttributeName5 != string.Empty ? " / " + productOption.AttributeName5 : string.Empty) +
+                                                      (productOption.AttributeName6 != string.Empty ? " / " + productOption.AttributeName6 : string.Empty) +
+                                                      (productOption.AttributeName7 != string.Empty ? " / " + productOption.AttributeName7 : string.Empty) +
+                                                      (productOption.AttributeName8 != string.Empty ? " / " + productOption.AttributeName8 : string.Empty) +
+                                                      (productOption.AttributeName9 != string.Empty ? " / " + productOption.AttributeName9 : string.Empty) +
+                                                      (productOption.AttributeName10 != string.Empty ? " / " + productOption.AttributeName10 : string.Empty) +
+                                                      (" Price:" + productOption.BasePrice.ToString("#,#.00#") + Model.CurrencyName)
+                                )
+                            </option>
+                        }
+                    </select>
+                    <span class="field-validation-error" id="spanddlFoodOption" style="display:none;" data-valmsg-replace="true">
+                        <i class="icon-exclamation-sign icon-border text-error"></i>
+                        <label id="lblddlFoodOption" class="help-inline"></label>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="totalPrice">Price</label>
+                    <input type="number" class="form-control" id="totalPrice" style="color:green" disabled="disabled" value="0"/>
+                </div>
+            </div>
+        </div>
+
+        @{
+            List<FSC_BOL.Models.FoodProduct.GbMProduct> drinksAndFriesAndDesserts = new List<FSC_BOL.Models.FoodProduct.GbMProduct>();
+            List<FSC_BOL.Models.FoodProduct.GbMProduct> toppings = new List<FSC_BOL.Models.FoodProduct.GbMProduct>();
+
+            drinksAndFriesAndDesserts = (from s in otherFoodProducts
+                                         where s.CategoryId == 3 || s.CategoryId == 4 || s.CategoryId == 6 || s.CategoryId == 8
+                                         select s).ToList();
+
+            toppings = (from s in otherFoodProducts
+                        where s.CategoryId == 7
+                        select s).ToList();
+        }
+        @if (drinksAndFriesAndDesserts != null && drinksAndFriesAndDesserts.Count > 0)
+        {
+            <h6>Drinks And Fries</h6>
+            <div class="row">
+                @foreach (FSC_BOL.Models.FoodProduct.GbMProduct drinkFries in drinksAndFriesAndDesserts)
+                {
+                    <div class="col-md-3">
+                        <div class="card" style="width: 11rem;">
+                            <div class="card-body">
+                                <h7 class="card-title">@drinkFries.ProductName</h7><br />
+                                <p class="card-text" style="color:green">@drinkFries.BasePrice.ToString("#,#.00#")  @Model.CurrencyName</p>
+                                <button type="button" id="btn_Add_@drinkFries.ProductId" onclick="AddTopping(@drinkFries.ProductId,@drinkFries.BasePrice)" class="btn btn-outline-primary btn-sm">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        @if (toppings != null && toppings.Count > 0)
+        {
+            <h6>@Model.ProductName Veg Toppings</h6>
+            <div class="row">
+                @foreach (FSC_BOL.Models.FoodProduct.GbMProduct topping in toppings)
+                {
+                    if (topping.VegNonVeg == "V")
+                    {
+                        <div class="col-md-3">
+                            <div class="card" style="width: 11rem;">
+                                <div class="card-body">
+                                    <h7 class="card-subtitle mb-2 text-muted">@topping.ProductName</h7>
+                                    <p class="card-text" style="color:green">@topping.BasePrice.ToString("#,#.00#")  @Model.CurrencyName</p>
+                                    <button type="button" id="btn_Add_@topping.ProductId" onclick="AddTopping(@topping.ProductId,@topping.BasePrice)" class="btn btn-outline-primary btn-sm">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <h6>Non-Veg Toppings</h6>
+            <div class="row">
+                @foreach (FSC_BOL.Models.FoodProduct.GbMProduct topping in toppings)
+                {
+                    if (topping.VegNonVeg == "N")
+                    {
+                        <div class="col-md-3">
+                            <div class="card" style="width: 10rem;">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">@topping.ProductName</h6>
+                                    <p class="card-text" style="color:green">@topping.BasePrice.ToString("#,#.00#")  @Model.CurrencyName</p>
+                                    <button type="button" id="btn_Add_@topping.ProductId" onclick="AddTopping(@topping.ProductId,@topping.BasePrice)" class="btn btn-outline-primary btn-sm">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    </form>
+
+    <script type="text/javascript">
+        var toppingsArray = [];
+        var productAttributes =@Html.Raw(Json.Encode((productAttributes)));
+        $(document).ready(function () {
+            toppingsArray = [];
+        });
+
+        function AddTopping(productId,price) {
+            MessageManager.ClearMessage();
+            ClearErrorMsg();
+            var flag = false;
+            flag = ValidateForm();
+            if (flag) {
+                var button_text = $('#btn_Add_' + productId).text();
+                if (button_text == "Add") {
+                    $('#btn_Add_' + productId).text('Remove');
+                    var topping = {};
+                    topping.ProductId = $("#product").val();
+                    topping.ToppingId = parseInt(productId);
+                    topping.Price = parseFloat(price);
+                    toppingsArray.push(topping);
+                }
+                else {
+                    $('#btn_Add_' + productId).text('Add');
+                    toppingsArray = toppingsArray.filter(function (item) {
+                        return item.ToppingId != productId;
+                    });
+                }
+                ChangePrice();
+            }
+        };
+
+        function OptionChange() {
+            toppingsArray = [];
+            $("#totalPrice").val("0");
+            ChangePrice();
+        };
+
+        function ChangePrice() {
+            var price = 0;
+            if ($("#ddlFoodOption").val() > 0) {
+                $.each(productAttributes, function (index, value) {
+                    if (value.ProductDetailId == $("#ddlFoodOption").val()) {
+                        price = parseFloat(value.BasePrice);
+                    }
+                });
+            }
+            $.each(toppingsArray, function (index, value) {
+                price = parseFloat(price) + parseFloat(value.Price);
+            });
+            $("#totalPrice").val(price);
+        };
+
+        function AddToCartCustomise() {
+            MessageManager.ClearMessage();
+            ClearErrorMsg();
+            var flag = false;
+            flag = ValidateForm();
+            if (flag) {
+                var price = 0;
+                $.each(productAttributes, function (index, value) {
+                    if (value.ProductDetailId == $("#ddlFoodOption").val()) {
+                        price = parseFloat(value.BasePrice);
+                    }
+                });
+
+                var ProductCart = {
+                    ProductId: $("#product").val(),
+                    ProductDetailId: $("#ddlFoodOption").val(),
+                    Qty: 1,
+                    Price: price,
+                    TotalPrice: $("#totalPrice").val()
+                };
+                
+                try {
+                    $.ajax({
+                        type: "POST",
+                        url: '../Home/AddToCart?jsonProduct=' + JSON.stringify(ProductCart) + '&jsonTopping=' + JSON.stringify(toppingsArray),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (msg) {
+                            if (msg[0].Value == "Error") {
+                                alert(msg[1].Value);
+                            }
+                            else {
+                                alert(msg[1].Value);
+                                $('#productCustomiseModal').modal('hide');
+                            }
+                        },
+                        error: function () {
+                            alert("Technical Error!");
+                        }
+                    });
+                }
+                catch (err) {
+                    alert("Technical Error!");
+                }
+            }
+        };
+    </script>
+</body>
+
+</html>

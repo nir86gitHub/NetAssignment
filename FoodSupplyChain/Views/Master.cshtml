@@ -1,0 +1,51 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.7.js"></script>
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <title>Food Suply Chain</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    @{
+        List<FSC_BOL.Models.FoodProduct.GbMCategory> objCategories = new List<FSC_BOL.Models.FoodProduct.GbMCategory>();
+        if (ViewBag.FSCCategoriesMenu != null)
+        {
+            objCategories = (List<FSC_BOL.Models.FoodProduct.GbMCategory>)ViewBag.FSCCategoriesMenu;
+        }
+    }
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #e3f2fd !important;">
+        <a class="navbar-brand" href="../Home/Home">Food Supply Chain</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                @foreach (FSC_BOL.Models.FoodProduct.GbMCategory objCategory in objCategories)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="../Home/Home?Category=@objCategory.CategoryId">@objCategory.CategoryName</a>
+                    </li>
+                }
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="button">Cart</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container">
+        <div style="margin-top:15px;">
+            @RenderBody()
+        </div>
+    </div>
+    <script src="~/Scripts/umd/popper.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/CustomScripts/CustomValidation.js"></script>
+    <script src="~/Scripts/CustomScripts/WebGlobal.js"></script>
+</body>
+</html>

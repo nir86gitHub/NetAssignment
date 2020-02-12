@@ -1,0 +1,114 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/Plugins/Css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Application name", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Add Food Item", "ManageFoodItem", "FoodItem")</li>
+                </ul>
+                <ul class="nav navbar-nav" style="float:right;background-color:dimgray;">
+                    @if (ViewBag.UserName != null)
+                    {
+                        <li><a href="#">Welcome,@ViewBag.UserName</a></li>
+                    }
+                    <li>@Html.ActionLink("Sign-Out", "LogOff", "Account")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content" style="margin-top:20px;">
+        @if (ViewBag.Title != null)
+        {
+            <h2>@ViewBag.Title</h2>
+        }
+        else if (TempData["Title"] != null)
+        {
+            <h2>@TempData["Title"]</h2>
+        }
+        @if (@ViewBag.MsgType != null)
+        {
+            if (@ViewBag.MsgType == "Success")
+            {
+                <div class="alert alert-success" id="divMsgMaster">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong>
+                        <i class="icon-check-sign icon-border text-success"></i>
+                        @ViewBag.Msg
+                    </strong>
+                    <br>
+                </div>
+            }
+            else if (@ViewBag.MsgType == "Error")
+            {
+                <div class="alert alert-warning" id="divMsgMaster">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong>
+                        <i class="icon-remove icon-border text-error"></i>
+                        @ViewBag.Msg
+                    </strong>
+                    <br>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <strong>
+                        <i class="icon-remove icon-border text-error"></i>
+                        @ViewBag.Msg
+                    </strong>
+                    <br>
+                </div>
+            }
+        }
+        <div class="row">
+            <div class="col-md-12">
+                <!--PAGE CONTENT BEGINS-->
+                <div style="clear: both;">
+                    @RenderBody()
+                </div>
+                @RenderSection("scripts", required: false)
+                <!--PAGE CONTENT ENDS-->
+            </div>
+            <!--/.span-->
+        </div>
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+
+    @Scripts.Render("~/bundles/Plugins")
+    <script src="~/Scripts/CustomScript/CustomValidation.js"></script>
+    <script src="~/Scripts/CustomScript/WebGlobal.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

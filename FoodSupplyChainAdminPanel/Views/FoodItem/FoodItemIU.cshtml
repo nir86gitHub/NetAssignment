@@ -1,0 +1,674 @@
+﻿@model FSC_BOL.Models.FoodProduct.GbMProduct
+@{
+    Layout = "~/Views/MasterPage/AdminPanelMaster.cshtml";
+}
+
+@{
+    List<FSC_BOL.Models.FoodProduct.GbMProductAttribute> objProductAttributeList = new List<FSC_BOL.Models.FoodProduct.GbMProductAttribute>();
+    List<FoodSupplyChainAdminPanel.Models.FSCFoodAttributes> objAttributesList = new List<FoodSupplyChainAdminPanel.Models.FSCFoodAttributes>();
+    List<FSC_BOL.Models.FoodProduct.GbMVendor> objVendors = new List<FSC_BOL.Models.FoodProduct.GbMVendor>();
+    List<FSC_BOL.Models.FoodProduct.GbMCurrency> objCurrencies = new List<FSC_BOL.Models.FoodProduct.GbMCurrency>();
+    List<FSC_BOL.Models.FoodProduct.GbMCategory> objCategories = new List<FSC_BOL.Models.FoodProduct.GbMCategory>();
+    if (ViewBag.FoodProductIUCategory != null)
+    {
+        objCategories = (List<FSC_BOL.Models.FoodProduct.GbMCategory>)ViewBag.FoodProductIUCategory;
+    }
+    if (ViewBag.FoodProductIUVendor != null)
+    {
+        objVendors = (List<FSC_BOL.Models.FoodProduct.GbMVendor>)ViewBag.FoodProductIUVendor;
+    }
+    if (ViewBag.FoodProductIUCurrency != null)
+    {
+        objCurrencies = (List<FSC_BOL.Models.FoodProduct.GbMCurrency>)ViewBag.FoodProductIUCurrency;
+    }
+
+    if (Model.ProductId > 0)
+    {
+        if (ViewBag.FoodProductIUAttributes != null)
+        {
+            objProductAttributeList = (List<FSC_BOL.Models.FoodProduct.GbMProductAttribute>)ViewBag.FoodProductIUAttributes;
+        }
+        if (ViewBag.FoodProductIUAllAttributes != null)
+        {
+            objAttributesList = (List<FoodSupplyChainAdminPanel.Models.FSCFoodAttributes>)ViewBag.FoodProductIUAllAttributes;
+        }
+    }
+}
+<form id="frmFoodItem" action="../FoodItem/ManageFoodItem" method="post">
+    <div class="alert alert-success" style="display: none" id="divMsg">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="icon-remove"></i>
+        </button>
+        <strong>
+            <span id="SysMsg"></span>
+        </strong>
+        <br>
+    </div>
+    <input type="hidden" id="hdProductId" value="@Model.ProductId" />
+    @Html.Hidden("hdMsg", "", new { id = "hdMsg" })
+    <h4 style="line-height: 28px;margin-bottom: 16px;margin-top: 18px;padding-bottom: 4px;border-bottom: 1px solid #CCC;">Basic Info</h4>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group" id="divddlCategory">
+                <label for="ddlCategory">Food Category</label>
+                @if (Model.ProductId == 0)
+                {
+                    <select class="form-control" id="ddlCategory" onchange="FoodCategoryChange()" data-required="True">
+                        <option value="0">--Select--</option>
+                        @foreach (FSC_BOL.Models.FoodProduct.GbMCategory category in objCategories)
+                        {
+                            if (Model.CategoryId == category.CategoryId)
+                            {
+                                <option value="@category.CategoryId" selected>@category.CategoryName</option>
+                            }
+                            else
+                            {
+                                <option value="@category.CategoryId">@category.CategoryName</option>
+                            }
+                        }
+                    </select>
+                    <span class="field-validation-error" id="spanddlCategory" style="display:none;" data-valmsg-replace="true">
+                        <i class="icon-exclamation-sign icon-border text-error"></i>
+                        <label id="lblddlCategory" class="help-inline"></label>
+                    </span>
+                }
+                else
+                {
+                    <input type="text" value="@Model.CategoryName" class="form-control" disabled="disabled" />
+                    <input type="hidden" id="ddlCategory" value="@Model.CategoryId" />
+                }
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group" id="divddlVendor">
+                <label for="ddlVendor">Vendor</label>
+                <select class="form-control" id="ddlVendor" data-required="True">
+                    <option value="0">--Select--</option>
+                    @foreach (FSC_BOL.Models.FoodProduct.GbMVendor vendor in objVendors)
+                    {
+                        if (Model.VendorId == vendor.VendorId)
+                        {
+                            <option value="@vendor.VendorId" selected>@vendor.VendorName</option>
+                        }
+                        else
+                        {
+                            <option value="@vendor.VendorId">@vendor.VendorName</option>
+                        }
+                    }
+                </select>
+                <span class="field-validation-error" id="spanddlVendor" style="display:none;" data-valmsg-replace="true">
+                    <i class="icon-exclamation-sign icon-border text-error"></i>
+                    <label id="lblddlVendor" class="help-inline"></label>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group" id="divtxtFoodItem">
+                <label for="txtFoodItem">Food Name</label>
+                <input type="text" value="@Model.ProductName" id="txtFoodItem" data-required="True" class="form-control" maxlength="50" />
+                <span class="field-validation-error" id="spantxtFoodItem" style="display:none;" data-valmsg-replace="true">
+                    <i class="icon-exclamation-sign icon-border text-error"></i>
+                    <label id="lbltxtFoodItem" class="help-inline"></label>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group" id="divtxtFoodDesc">
+                <label for="txtFoodDesc">Food Desc</label>
+                <textarea type="text" id="txtFoodDesc" data-required="True" class="form-control" maxlength="300" style="resize:none;">@Model.ProductDesc</textarea>
+                <span class="field-validation-error" id="spantxtFoodDesc" style="display:none;" data-valmsg-replace="true">
+                    <i class="icon-exclamation-sign icon-border text-error"></i>
+                    <label id="lbltxtFoodDesc" class="help-inline"></label>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group" id="divtxtBasePrice">
+                <label for="txtBasePrice">Price</label>
+                <input type="number" id="txtBasePrice" value="@Model.BasePrice" class="form-control" />
+                <span class="field-validation-error" id="spantxtBasePrice" style="display:none;" data-valmsg-replace="true">
+                    <i class="icon-exclamation-sign icon-border text-error"></i>
+                    <label id="lbltxtBasePrice" class="help-inline"></label>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group" id="divddlCurrency">
+                <label for="ddlCurrency">Currency</label>
+                <select class="form-control" id="ddlCurrency" data-required="True">
+                    <option value="0">--Select--</option>
+                    @foreach (FSC_BOL.Models.FoodProduct.GbMCurrency currency in objCurrencies)
+                    {
+                        if (Model.BaseCurrencyId == currency.CurrencyId)
+                        {
+                            <option value="@currency.CurrencyId" selected>@currency.CurrencyCode</option>
+                        }
+                        else
+                        {
+                            <option value="@currency.CurrencyId">@currency.CurrencyCode</option>
+                        }
+                    }
+                </select>
+                <span class="field-validation-error" id="spanddlCurrency" style="display:none;" data-valmsg-replace="true">
+                    <i class="icon-exclamation-sign icon-border text-error"></i>
+                    <label id="lblddlCurrency" class="help-inline"></label>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="form-group" id="divddlVegNonVeg">
+                <label for="ddlVegNonVeg">Veg/Non-Veg</label>
+                <select class="form-control" id="ddlVegNonVeg">
+                    <option value="">--Select--</option>
+                    @if (Model.VegNonVeg == "V" || Model.VegNonVeg == "N")
+                    {
+                        if (Model.VegNonVeg == "V")
+                        {
+                            <option value="V" selected>Veg</option>
+                            <option value="N">Non-Veg</option>
+                        }
+                        else
+                        {
+                            <option value="V">Veg</option>
+                            <option value="N" selected>Non-Veg</option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="V">Veg</option>
+                        <option value="N">Non-Veg</option>
+                    }
+                </select>
+                <span class="field-validation-error" id="spanddlVegNonVeg" style="display:none;" data-valmsg-replace="true">
+                    <i class="icon-exclamation-sign icon-border text-error"></i>
+                    <label id="lblddlVegNonVeg" class="help-inline"></label>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group" id="divtxtImageURL">
+                <label for="txtImageURL">Image URL</label>
+                <input type="text" id="txtImageURL" value="@Model.ImageURL" data-required="True" class="form-control" maxlength="100" />
+                <span class="field-validation-error" id="spantxtImageURL" style="display:none;" data-valmsg-replace="true">
+                    <i class="icon-exclamation-sign icon-border text-error"></i>
+                    <label id="lbltxtImageURL" class="help-inline"></label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.ProductId == 0)
+    {
+        <div id="divOptions" style="display:none">
+            <h4 style="line-height: 28px;margin-bottom: 16px;margin-top: 18px;padding-bottom: 4px;border-bottom: 1px solid #CCC;">Select Options</h4>
+            <div id="divProductAttributes" class="row">
+            </div>
+        </div>
+    }
+    else
+    {
+        if (objAttributesList != null && objAttributesList.Count > 0)
+        {
+            <div id="divOptions">
+                <h4 style="line-height: 28px;margin-bottom: 16px;margin-top: 18px;padding-bottom: 4px;border-bottom: 1px solid #CCC;">Select Options</h4>
+                <div id="divProductAttributes" class="row">
+                    @foreach (FoodSupplyChainAdminPanel.Models.FSCFoodAttributes attribute in objAttributesList)
+                    {
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="@attribute.AttributeGroupCode">Select @attribute.AttributeGroupDesc : </label>
+                                <select class="form-control" id="@attribute.AttributeGroupCode" multiple="multiple" onchange="AttributeChange($(this))">
+                                    @foreach (FoodSupplyChainAdminPanel.Models.FSCFoodAttributeValues attributeValues in attribute.FoodAttributes)
+                                    {
+                                        bool isSelected = false;
+                                        foreach (FSC_BOL.Models.FoodProduct.GbMProductAttribute productAttribute in objProductAttributeList)
+                                        {
+                                            if (
+                                                productAttribute.AttributeId1 == attributeValues.AttributeId ||
+                                                productAttribute.AttributeId2 == attributeValues.AttributeId ||
+                                                productAttribute.AttributeId3 == attributeValues.AttributeId ||
+                                                productAttribute.AttributeId4 == attributeValues.AttributeId ||
+                                                productAttribute.AttributeId5 == attributeValues.AttributeId ||
+                                                productAttribute.AttributeId6 == attributeValues.AttributeId ||
+                                                productAttribute.AttributeId7 == attributeValues.AttributeId ||
+                                                productAttribute.AttributeId8 == attributeValues.AttributeId ||
+                                                productAttribute.AttributeId9 == attributeValues.AttributeId ||
+                                                productAttribute.AttributeId10 == attributeValues.AttributeId
+                                            )
+                                            {
+                                                isSelected = true;
+                                            }
+                                        }
+                                        if (isSelected)
+                                        {
+                                            <option value="@attributeValues.AttributeId" selected>@attributeValues.AttributeValue</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@attributeValues.AttributeId">@attributeValues.AttributeValue</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+    @{
+        string strProductDivDisplay = "display:none";
+        if (Model.ProductId > 0 && objProductAttributeList.Count > 0)
+        {
+            strProductDivDisplay = "display:block";
+        }
+    }
+    <div id="divProducts" style="@strProductDivDisplay">
+        <h4 style="line-height: 28px;margin-bottom: 16px;margin-top: 18px;padding-bottom: 4px;border-bottom: 1px solid #CCC;">Food Products</h4>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="tblFoodProductDetails" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sr.No.</th>
+                            <th>Food Name</th>
+                            <th>Base Price</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.ProductId > 0 && objProductAttributeList.Count > 0)
+                        {
+                            int count = 1;
+                            foreach (FSC_BOL.Models.FoodProduct.GbMProductAttribute productAttribute in objProductAttributeList)
+                            {
+                                <tr>
+                                    <td class="foodProduct">
+                                        @count
+                                        <input type="hidden" id="hdAttributeId1" value="@productAttribute.AttributeId1" />
+                                        <input type="hidden" id="hdAttributeId2" value="@productAttribute.AttributeId1" />
+                                        <input type="hidden" id="hdProductDetailId" value="@productAttribute.ProductDetailId" />
+                                    </td>
+                                    <td>
+                                        @(Model.ProductName + " (" + productAttribute.AttributeName1 + (productAttribute.AttributeName2 != string.Empty ? " / " + productAttribute.AttributeName2 + ")" : ")"))
+                                    </td>
+                                    <td>
+                                        <div class="form-group" id="divtxtDetailBasePrice_@count">
+                                            <input type="number" id="txtDetailBasePrice_@count" value="@productAttribute.BasePrice" class="form-control" />
+                                            <span class="field-validation-error" id="spantxtDetailBasePrice_@count" style="display:none;" data-valmsg-replace="true">
+                                                <i class="icon-exclamation-sign icon-border text-error"></i>
+                                                <label id="lbltxtDetailBasePrice_@count" class="help-inline"></label>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="well well-small" align="right">
+        @if (Model.ProductId > 0)
+        {
+            @*<button class="btn btn-small btn-primary" type="button" onclick="InsUpdFoodItem('Y')">Update</button>*@
+            <button class="btn btn-small btn-danger" type="button" onclick="InsUpdFoodItem('N')">De-Activate</button>
+        }
+        else
+        {
+            <button class="btn btn-small btn-primary" type="button" onclick="InsUpdFoodItem('Y')">Add Food Item</button>
+        }
+        <button class="btn btn-small btn-primary" type="button" onclick="Javascript:{window.location.href='../FoodItem/ManageFoodItem'}">Back</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    var objAttributesList =@Html.Raw(Json.Encode((objAttributesList)));
+    $(function () {
+        if ($("#hdProductId").val() > 0) {
+            if (objAttributesList !== null && objAttributesList !== undefined && objAttributesList.length > 0) {
+                $.each(objAttributesList, function (index, value) {
+                    $('#' + value.AttributeGroupCode).multiselect({
+                        includeSelectAllOption: false
+                    });
+                });
+            }
+        }
+    });
+
+    function InsUpdFoodItem(IsActive) {
+        MessageManager.ClearMessage();
+        ClearErrorMsg();
+        if (IsActive == 'Y') {
+            var flag = false;
+            flag = ValidateForm();
+            if (flag) {
+                if (objAttributesList !== null && objAttributesList != undefined && objAttributesList.length > 0) {
+                    flag = ValidateProductDetails();
+                }
+                if (flag) {
+                    InsertFoodItem(IsActive);
+                }
+            }
+        }
+        else {
+            InsertFoodItem(IsActive);
+        }
+    };
+
+    function InsertFoodItem(IsActive) {
+        var FoodProduct = {};
+        var strFoodProductDetailArr = "[";
+        if (IsActive == "Y") {
+            var basePrice = 0;
+            if ($("#txtBasePrice").val() > 0) {
+                basePrice = $("#txtBasePrice").val();
+            }
+            FoodProduct = {
+                ProductId: $("#hdProductId").val()
+                , CategoryId: $("#ddlCategory").val()
+                , VendorId: $("#ddlVendor").val()
+                , ProductName: $("#txtFoodItem").val()
+                , ProductDesc: $("#txtFoodDesc").val()
+                , BasePrice: basePrice
+                , BaseCurrencyId: $("#ddlCurrency").val()
+                , VegNonVeg: $("#ddlVegNonVeg").val()
+                , ImageURL: $("#txtImageURL").val()
+                , IsAllowedToCustomise: objAttributesList.length > 0 ? "Y" : "N"
+                , IsActive: IsActive
+            };
+
+            $("#tblFoodProductDetails tr").each(function (i, item) {
+                if (parseInt(i) > 0) {
+                    strFoodProductDetailArr = strFoodProductDetailArr + "{";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'ProductDetailId':" + $(item).find("#hdProductDetailId").val() + ",";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'BasePrice':" + $(item).find("#txtDetailBasePrice_" + (i)).val() + ",";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'AttributeId1':" + $(item).find("#hdAttributeId1").val() + ",";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'AttributeId2':" + $(item).find("#hdAttributeId2").val() + ",";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'AttributeId3':0,";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'AttributeId4':0,";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'AttributeId5':0,";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'AttributeId6':0,";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'AttributeId7':0,";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'AttributeId8':0,";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'AttributeId9':0,";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'AttributeId10':0,";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "'IsActive':'Y'";
+                    strFoodProductDetailArr = strFoodProductDetailArr + "},";
+                }
+            });
+        }
+        else {
+            FoodProduct = {
+                  ProductId: $("#hdProductId").val()
+                , IsActive: IsActive
+            };
+        }
+        if (strFoodProductDetailArr != "[") {
+            strFoodProductDetailArr = strFoodProductDetailArr.substring(0, strFoodProductDetailArr.length - 1);
+            strFoodProductDetailArr = strFoodProductDetailArr + "]";
+        }
+        else { strFoodProductDetailArr = ""; }
+
+        $.ajax({
+            type: "POST",
+            url: '../FoodItemAjax/InsUpdFoodProduct?jsonProduct=' + JSON.stringify(FoodProduct) + '&jsonProductDetails=' + strFoodProductDetailArr,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (msg) {
+                if (msg[0].Value == "Error") {
+                    MessageManager.ShowMessage(msg[1].Value, "Error");
+                }
+                else {
+                    var Msg =
+                    {
+                        MsgType: msg[0].Value,
+                        Msg: msg[1].Value,
+
+                    };
+                    $("#hdMsg").val(JSON.stringify(Msg));
+                    $("#frmFoodItem").submit();
+                }
+            },
+            error: function () {
+                MessageManager.ShowMessage("Error!", "Error");
+            }
+        });
+    };
+
+    function ValidateProductDetails() {
+        var flag = true;
+        var ProductCnt = 0;
+        $("#tblFoodProductDetails tr").each(function (i, item) {
+            if (parseInt(i) > 0) {
+                ClearErrorControlMsg("txtDetailBasePrice_" + (i));
+                ProductCnt = ProductCnt + 1;
+            }
+        });
+        if (ProductCnt == 0) { flag = false; }
+        if (flag) {
+            $("#tblFoodProductDetails tr").each(function (i, item) {
+                if (parseInt(i) > 0) {
+                    var basePrice = $(item).find("#txtDetailBasePrice_" + (i)).val();
+                    if (!basePrice > 0) {
+                        flag = false;
+                        ErrorControlMsg("txtDetailBasePrice_" + (i),"Price Mandatory!");
+                    }
+                }
+            });
+        }
+        else {
+            MessageManager.ShowMessage("Please Select Atleast One Food Option!", "Error");
+        }
+        return flag;
+    };
+
+    function FoodCategoryChange() {
+        var category = $("#ddlCategory").val();
+        $('#divProductAttributes').empty();
+        objAttributesList = [];
+        $('#tblFoodProductDetails tr').not(function () { if ($(this).has('th').length) { return true } }).remove();
+        $('#divOptions').css('display', 'none');
+        $('#divProducts').css('display', 'none');
+        if (category > 0) {
+            GetAttributes(category);
+        }
+        else {
+            ResetControls();
+        }
+    };
+
+    function GetAttributes(category) {
+        MessageManager.ClearMessage();
+        try {
+            $.ajax({
+                type: "POST",
+                url: '../FoodItemAjax/GetProductAttributes?category=' + category,
+                contentType: "application/json; charset=utf-8",
+                success: function (listAttributes) {
+                    if (listAttributes !== undefined && listAttributes.length > 0) {
+                        $('#divOptions').css('display', 'block');
+                        $('#divProducts').css('display', 'block');
+                        objAttributesList = listAttributes;
+                        $.each(listAttributes, function (index, value) {
+                            var attributeOptions = '';
+                            var selectOptions = '';
+                            $.each(value.FoodAttributes, function (index1, value1) {
+                                selectOptions = selectOptions + '<option value="' + value1.AttributeId + '">' + value1.AttributeValue + '</option>'
+                            });
+                            attributeOptions = '<div class="col-md-3"><div class="form-group">'
+                                + '<label for="' + value.AttributeGroupCode + '">Select ' + value.AttributeGroupDesc + ':  </label>     '
+                                + '<select class="form-control" id="' + value.AttributeGroupCode + '" multiple="multiple" onchange="AttributeChange($(this))">' + selectOptions + '</select>'
+                                + '</div></div>';
+                            $('#divProductAttributes').append(attributeOptions);
+                            $('#' + value.AttributeGroupCode).multiselect({
+                                includeSelectAllOption: false
+                            });
+                        });
+                    }
+                },
+                error: function () {
+                    MessageManager.ShowMessage("Technical Error!", "Error");
+                }
+            });
+        }
+        catch (err) {
+            MessageManager.ShowMessage("Technical Error!", "Error");
+        }
+    };
+
+    function AttributeChange(controlId) {
+        MessageManager.ClearMessage();
+        if ($("#txtFoodItem").val() !== '') {
+            var foodProductDetails = MakeFoodProducts(controlId);
+            RefreshFoodProductTable(foodProductDetails);
+        }
+        else {
+            $("#" + controlId[0].id + " > option").attr("selected", false);
+            MessageManager.ShowMessage("Please Enter Food Name!", "Error");
+        }
+    };
+
+    function MakeFoodProducts(controlId) {
+        var selectedAttributes = [];
+        var otherSelectedAttributes = [];
+        var foodProductsDetails = [];
+        var foodProduct = {};
+        //Make Array Of Combination
+        var foodName = $("#txtFoodItem").val();
+        $('option:selected', controlId).each(function () {
+            selectedAttributes = controlId.val();
+        });
+
+        $.each(objAttributesList, function (index, value) {
+            if (value.AttributeGroupCode !== controlId[0].id) {
+                if ($("#" + value.AttributeGroupCode).val() !== null && $("#" + value.AttributeGroupCode).val() !== undefined) {
+                    var others = $("#" + value.AttributeGroupCode).val();
+                    for (var i = 0; i < others.length; i++) {
+                        otherSelectedAttributes.push(others[i]);
+                    }
+                }
+            }
+        });
+
+        if (otherSelectedAttributes !== undefined && otherSelectedAttributes.length > 0) {
+            for (var i = 0; i < selectedAttributes.length; i++) {
+                $.each(objAttributesList, function (index, value) {
+                    $.each(value.FoodAttributes, function (index1, value1) {
+                        if (value1.AttributeId == selectedAttributes[i]) {
+                            for (var j = 0; j < otherSelectedAttributes.length; j++) {
+                                $.each(objAttributesList, function (index2, value2) {
+                                    $.each(value2.FoodAttributes, function (index3, value3) {
+                                        if (value3.AttributeId == otherSelectedAttributes[j]) {
+                                            foodProduct = {};
+                                            foodProduct.ProductDetailId = 0;
+                                            foodProduct.ProductName = foodName;
+                                            foodProduct.BasePrice = 0;
+                                            foodProduct.AttributeId1 = value1.AttributeId
+                                            foodProduct.AttributeName1 = value1.AttributeGroupDesc + ':' + value1.AttributeValue;
+                                            foodProduct.AttributeId2 = value3.AttributeId
+                                            foodProduct.AttributeName2 = value3.AttributeGroupDesc + ':' + value3.AttributeValue;
+                                            foodProductsDetails.push(foodProduct);
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+        }
+        else {
+            for (var i = 0; i < selectedAttributes.length; i++) {
+                $.each(objAttributesList, function (index, value) {
+                    $.each(value.FoodAttributes, function (index1, value1) {
+                        if (value1.AttributeId == selectedAttributes[i]) {
+                            foodProduct = {};
+                            foodProduct.ProductDetailId = 0;
+                            foodProduct.ProductName = foodName;
+                            foodProduct.BasePrice = 0;
+                            foodProduct.AttributeId1 = value1.AttributeId
+                            foodProduct.AttributeName1 = value1.AttributeGroupDesc + ':' + value1.AttributeValue;
+                            foodProductsDetails.push(foodProduct);
+                        }
+                    });
+                });
+            }
+        }
+
+        return foodProductsDetails;
+    };
+
+    function RefreshFoodProductTable(foodProductsDetails) {
+        $('#tblFoodProductDetails tr').not(function () { if ($(this).has('th').length) { return true } }).remove();
+        for (var i = 0; i < foodProductsDetails.length; i++) {
+            var hdAttributeId2 = '';
+            if (foodProductsDetails[i].AttributeId2 !== undefined && foodProductsDetails[i].AttributeId2 > 0) {
+                hdAttributeId2 = "<input type='hidden' id='hdAttributeId2' value ='" + foodProductsDetails[i].AttributeId2 + "'/>";
+            }
+            else {
+                hdAttributeId2 = "<input type='hidden' id='hdAttributeId2' value ='0'/>";
+            }
+            var row = '<tr><td class="foodProduct">' + (i + 1) +
+                '<input type="hidden" id="hdAttributeId1" value="' + foodProductsDetails[i].AttributeId1 + '"/>' +
+                '<input type="hidden" id="hdProductDetailId" value="' + foodProductsDetails[i].ProductDetailId + '"/>' +
+                hdAttributeId2 +
+                '</td>' +
+                '<td>' + foodProductsDetails[i].ProductName + ' (' + foodProductsDetails[i].AttributeName1;
+            if (foodProductsDetails[i].AttributeId2 !== undefined && foodProductsDetails[i].AttributeId2 > 0) {
+                row = row + ' /' + foodProductsDetails[i].AttributeName2;
+            }
+            row = row + ')</td>';
+
+            var btnDelete = '';
+            if (foodProductsDetails.ProductDetailId > 0) {
+                btnDelete = "<button class='btn btn-danger btn-mini' type='button' onclick ='UpdateProductDetails($(this))'>Delete</button>";
+            }
+            else {
+                btnDelete = "<button class='btn btn-danger btn-mini' type='button' onclick ='DeleteRow($(this))'>Delete</button>";
+            }
+
+            var btnUpdate = '';
+            if (foodProductsDetails.ProductDetailId > 0) {
+                btnUpdate = "<button class='btn btn-primary btn-mini' type='button' onclick ='UpdateProductDetails($(this))'>Delete</button>";
+            }
+
+            row = row + '<td><div class="form-group" id="divtxtDetailBasePrice_' + (i + 1) + '"><input type="number" id="txtDetailBasePrice_' + (i + 1) + '" class="form-control"/>' +
+                '<span class="field-validation-error" id="spantxtDetailBasePrice_'+(i+1)+'" style="display:none;" data-valmsg-replace="true">'+
+                '<i class="icon-exclamation-sign icon-border text-error" ></i>'+
+                '<label id="lbltxtDetailBasePrice_' + (i + 1) + '" class="help-inline"></label></span></div>'+
+                '</td > ' +
+                '<td>' + btnDelete + '</td>' +
+                '<td>' + btnUpdate+'</td>';
+
+            $('#tblFoodProductDetails').append(
+                row
+            );
+        }
+    };
+
+    function ResetControls() {
+        $("#ddlCategory").val("0");
+        $("#ddlVendor").val("0");
+        $("#txtFoodItem").val("");
+        $("#txtFoodDesc").val("");
+        $("#txtBasePrice").val("0");
+        $("#ddlCurrency").val("0");
+        $("#ddlVegNonVeg").val("");
+        $("#txtImageURL").val("");
+    };
+
+    function DeleteRow(row) {
+        row.closest('tr').remove();
+    };
+</script>
+
+

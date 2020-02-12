@@ -1,0 +1,292 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+
+
+    input.input-validation-error {
+        border-color: #d16e6c;
+    }
+
+    textarea.input-validation-error {
+        border-color: #d16e6c;
+    }
+
+    select.input-validation-error {
+        border-color: #d16e6c;
+    }
+
+.field-validation-error {
+    color: #d16e6c;
+    font-size: 12px !important;
+    margin-top:4px;
+}
+
+.alert-block {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+}
+
+.well {
+    border-radius: 0;
+    padding-bottom: 9px;
+    padding-top: 9px;
+}
+
+.Optional {
+    background-color: #d6d6d6 !important;
+}
+
+.k-grid-header :first-child.k-header {
+    border-left-width: 0px;
+    font-size: 14px;
+}
+
+.k-grid-header :first-child.k-header {
+    border-left-width: 0px;
+    padding-right: 2.4em;
+    font-size: 14px;
+}
+
+.k-overlay {
+    left: 0px !important;
+    top: 0px !important;
+    width: 100% !important;
+    height: 100% !important;
+    position: fixed !important;
+    z-index: 10001 !important;
+    opacity: 0.8 !important;
+    background-color: rgb(0, 0, 0) !important;
+}
+
+.k-window-titlebar {
+    margin-top: -30px !important;
+    background: #2679b5 !important;
+}
+
+.k-widget k-window {
+    border: 3px solid #dad8ed !important;
+}
+
+.k-window-title {
+    color: white !important;
+}
+
+.datagrid table {
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+}
+
+.datagrid {
+    font: normal 12px/150% Arial, Helvetica, sans-serif;
+    background: #fff;
+    overflow: hidden;
+    border: 1px solid #EE772D;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+    .datagrid table td, .datagrid table th {
+        padding: 3px 3px;
+    }
+
+    .datagrid table thead th {
+        background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #EE772D), color-stop(1, #EE772D) );
+        background: -moz-linear-gradient( center top, #EE772D 5%, #EE772D 100% );
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EE772D', endColorstr='#EE772D');
+        background-color: #EE772D;
+        color: #FFFFFF;
+        font-size: 15px;
+        font-weight: bold;
+        border-left: 1px solid #BF691E;
+    }
+
+        .datagrid table thead th:first-child {
+            border: none;
+        }
+
+    .datagrid table tbody td {
+        color: #000000;
+        border-left: 1px solid #F0E5CC;
+        font-size: 12px;
+        border-bottom: 1px solid #E1EEF4;
+        font-weight: normal;
+    }
+
+        .datagrid table tbody td:first-child {
+            border-left: none;
+        }
+
+    .datagrid table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .datagrid table tfoot td div {
+        border-top: 1px solid #EE772D;
+        background: #F0E5CC;
+    }
+
+    .datagrid table tfoot td {
+        padding: 0;
+        font-size: 12px;
+    }
+
+        .datagrid table tfoot td div {
+            padding: 2px;
+        }
+
+        .datagrid table tfoot td ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            text-align: right;
+        }
+
+    .datagrid table tfoot li {
+        display: inline;
+    }
+
+        .datagrid table tfoot li a {
+            text-decoration: none;
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 1px;
+            color: #FFFFFF;
+            border: 1px solid #A65B1A;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #A65B1A), color-stop(1, #7F4614) );
+            background: -moz-linear-gradient( center top, #A65B1A 5%, #7F4614 100% );
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#A65B1A', endColorstr='#7F4614');
+            background-color: #A65B1A;
+        }
+
+    .datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover {
+        text-decoration: none;
+        border-color: #7F4614;
+        color: #FFFFFF;
+        background: none;
+        background-color: #A65B1A;
+    }
+
+div.dhtmlx_window_active, div.dhx_modal_cover_dv {
+    position: fixed !important;
+}
+
+.btnSave {
+    margin-left: 46px;
+    width: 21px;
+}
+
+.btnDelete {
+    margin-left: 46px;
+    width: 21px;
+}
+
+.btnEdit {
+    width: 21px;
+}
+
+.btnCancle {
+    width: 21px;
+}
+
+.lblColor {
+    color: #2679b5 !important;
+}
+/*.label-info.arrowed-right:after {
+border-left-color: #ee772d !important;
+}
+.label-info.arrowed-in:before {
+border-color:  #ee772d !important;
+}*/
+.widget-main.no-padding .table, .widget-main.padding-0 .table {
+    margin-bottom: 0;
+    border: 1;
+}
+
+.label-important, .badge-important {
+    background-color: grey !important;
+}
+
+
+.myTable {
+    border: solid 1px black;
+    border-collapse: collapse;
+    /*background: url("/Content/assets/images/ContEIR.png");*/
+}
+
+    .myTable tr {
+        height: 25px;
+    }
+
+    .myTable td {
+        height: 35px;
+        width: 25px;
+        text-align: center;
+        font-family: Verdana;
+        font-size: 9px;
+    }
+
+.dynatable {
+    border: solid 1px #000;
+    border-collapse: collapse;
+}
+
+    .dynatable th, .dynatable td {
+        border: solid 1px #000;
+        padding: 2px 10px;
+        width: 170px;
+        text-align: center;
+    }
+
+    .dynatable .prototype {
+        display: none;
+    }
+
+.innerdiv {
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.table-header {
+    background-color: #5596d7;
+    color: #FFF;
+    font-size: 14px;
+    line-height: 25px;
+    padding-left: 12px;
+    margin-bottom: 1px;
+}
+
+.LiError {
+    background-color: red !important;
+}
+
+.ReportViewerIFrame {
+    height: 1100px;
+    width: 100%;
+}
+
+.ReportViewerIFramePopUp {
+    height: 100%;
+    width: 100%;
+}

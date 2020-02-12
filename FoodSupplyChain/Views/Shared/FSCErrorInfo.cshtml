@@ -1,0 +1,17 @@
+﻿@model FoodSupplyChain.Models.FSCErrorInfo
+@{
+    Layout = "~/Views/Master.cshtml";
+}
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">500 Something Went Wrong</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+            But we are working on it!
+            <i class="icon-wrench icon-animated-wrench bigger-125"></i>
+        </h6>
+        <p class="card-text">@Convert.ToString(Model.Exception.Message).</p>
+    </div>
+</div>
+
+

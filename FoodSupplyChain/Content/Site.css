@@ -1,0 +1,30 @@
+﻿
+
+    input.input-validation-error {
+        border-color: #d16e6c;
+    }
+
+    textarea.input-validation-error {
+        border-color: #d16e6c;
+    }
+
+    select.input-validation-error {
+        border-color: #d16e6c;
+    }
+
+.field-validation-error {
+    color: #d16e6c;
+    font-size: 12px !important;
+    margin-top:4px;
+}
+
+.alert-block {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+}
+
+.well {
+    border-radius: 0;
+    padding-bottom: 9px;
+    padding-top: 9px;
+}

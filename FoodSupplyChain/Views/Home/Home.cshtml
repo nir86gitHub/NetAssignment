@@ -1,0 +1,104 @@
+﻿@model List<FSC_BOL.Models.FoodProduct.GbMProduct>
+@{
+    Layout = "~/Views/Master.cshtml";
+}
+<form>
+    <div class="row">
+        @foreach (FSC_BOL.Models.FoodProduct.GbMProduct product in Model)
+        {
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="~/Content/Images/DEFAULT.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.ProductName</h5>
+                        <p class="card-text">@product.ProductDesc.</p>
+                    </div>
+                    @if (product.IsAllowedToCustomise == "N")
+                    {
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" style="color:green;font-weight:bold;">@product.BasePrice.ToString("#,#.00#") @product.CurrencyName</li>
+                        </ul>
+                    }
+                    <div class="card-body">
+                        @if (product.IsAllowedToCustomise == "Y")
+                        {
+                            <button type="button" class="btn btn-outline-primary" onclick="Customise('@product.ProductId','@product.IsAllowedToCustomise')">Customise</button>
+                        }
+                        <button type="button" class="btn btn-outline-success" onclick="AddToCart('@product.ProductId','@product.IsAllowedToCustomise','@product.BasePrice')">Add To Cart</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id='productCustomiseModal'>
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Customise</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id='productCustomiseContainer'>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="AddToCartCustomise()">Add To Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    function Customise(productId) {
+        var url = '../Home/CustomiseFoodProduct?Product=' + productId;
+        $.get(url, function (data) {
+            $('#productCustomiseContainer').html(data);
+            $('#productCustomiseModal').modal('show');
+        });
+    };
+
+    function AddToCart(productId, isAllowedToCustomise, price) {
+        if (isAllowedToCustomise == "Y") {
+            Customise(productId);
+        }
+        else {
+            SaveSession(productId, price);
+        }
+    };
+
+    function SaveSession(productId, price) {
+        var ProductCart = {
+            ProductId: productId,
+            ProductDetailId: 0,
+            Qty: 1,
+            Price: price,
+            TotalPrice: price
+        };
+        try {
+            $.ajax({
+                type: "POST",
+                url: '../Home/AddToCart?jsonProduct=' + JSON.stringify(ProductCart),
+                contentType: "application/json; charset=utf-8",
+                success: function (msg) {
+                    if (msg[0].Value == "Error") {
+                        alert(msg[1].Value);
+                    }
+                    else {
+                        alert(msg[1].Value);
+                    }
+                },
+                error: function () {
+                    alert("Technical Error!");
+                }
+            });
+        }
+        catch (err) {
+            alert("Technical Error!");
+        }
+    };
+</script>
+
